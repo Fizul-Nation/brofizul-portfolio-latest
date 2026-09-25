@@ -1,818 +1,1173 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brofizul | Education Hacks</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
-                        'brand': ['Syncopate', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brofizul | Education Hacks</title>
+<meta name="description" content="There is no failure, only feedback. Free e-books and research briefings by Brofizul.">
+<meta name="theme-color" content="#9bd7f0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* Set theme BEFORE paint to avoid flash */
+(function(){
+  try{
+    const saved = localStorage.getItem('brofizul_theme');
+    if (saved === 'night') document.documentElement.dataset.theme = 'night';
+  }catch(e){}
+})();
+</script>
+<style>
+/* =========================================================
+   1. RESET + TOKENS
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-        body {
-            background: #000000;
-            font-family: 'Inter', sans-serif;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
+/* ---- DAY (default) ---- */
+:root{
+  --sky1:#a8dff5;
+  --sky2:#d8eefb;
+  --grass:#7cc576;
+  --grass-dark:#5aa858;
+  --tree:#4a8b47;
+  --tree-dark:#356b34;
+  --hill:#7cc576;
+  --hill-far:#9ed4a4;
+  --trunk:#8b5a3c;
+  --sun:#ffe9a8;
+  --sun-glow:rgba(255,233,168,.55);
+  --cloud:#ffffff;
+  --cloud-opacity:0.85;
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
+  --paper:#fdfbf4;
+  --paper2:#f5f1e4;
+  --line:#d6cfb8;
+  --line2:#b9b097;
 
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
+  --text:#3a3a2e;
+  --head:#2a2a1e;
+  --muted:#7a7460;
+  --accent:#e07b39;
+  --accent2:#b85c1e;
+  --btn-text:#ffffff;
 
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 3px;
-        }
+  --panel-shadow:rgba(42,42,30,.18);
+  --panel-shadow-hover:rgba(42,42,30,.22);
+  --nav-bg:rgba(253,251,244,.94);
+  --modal-backdrop:rgba(42,42,30,.85);
 
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+  --px:'Press Start 2P',monospace;
+  --body:'Inter',system-ui,-apple-system,sans-serif;
+}
 
-        .gradient-text {
-            background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 50%, #ffffff 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s ease-in-out infinite;
-        }
+/* ---- NIGHT ---- */
+:root[data-theme="night"]{
+  --sky1:#0d1330;
+  --sky2:#1a2148;
+  --grass:#1e4a2c;
+  --grass-dark:#123420;
+  --tree:#163d2a;
+  --tree-dark:#0d2a1c;
+  --hill:#1e4a2c;
+  --hill-far:#243a5c;
+  --trunk:#3a2418;
+  --sun:#f2ecd0;
+  --sun-glow:rgba(242,236,208,.35);
+  --cloud:#3a4570;
+  --cloud-opacity:0.55;
 
-        @keyframes shimmer {
+  --paper:#181d3a;
+  --paper2:#1f2547;
+  --line:#2c3768;
+  --line2:#1b2452;
 
-            0%,
-            100% {
-                background-position: 0% center;
-            }
+  --text:#c7d1f4;
+  --head:#f4e9d4;
+  --muted:#8fa5ff;
+  --accent:#ff8c26;
+  --accent2:#c25f10;
+  --btn-text:#1c0f02;
 
-            50% {
-                background-position: 200% center;
-            }
-        }
+  --panel-shadow:rgba(0,0,0,.45);
+  --panel-shadow-hover:rgba(0,0,0,.55);
+  --nav-bg:rgba(13,19,48,.94);
+  --modal-backdrop:rgba(4,6,16,.9);
+}
 
-        .profile-ring {
-            position: relative;
-        }
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--sky1);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+  transition:background-color .5s ease,color .5s ease;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+:focus-visible{outline:3px dashed var(--accent);outline-offset:3px}
+::selection{background:var(--accent);color:var(--btn-text)}
 
-        .profile-ring::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #6366f1);
-            background-size: 300% 300%;
-            animation: rotateGradient 4s linear infinite;
-            z-index: -1;
-        }
+/* =========================================================
+   2. RETRO NATURE BACKGROUND
+   ========================================================= */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 100%);
+  z-index:-3;
+  transition:background .6s ease;
+}
 
-        .profile-ring::after {
-            content: '';
-            position: absolute;
-            inset: -20px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-            animation: pulse 2s ease-in-out infinite;
-            z-index: -2;
-        }
+/* Sun / Moon */
+body::after{
+  content:"";
+  position:fixed;
+  top:8%;
+  right:8%;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:var(--sun);
+  box-shadow:
+    0 0 0 8px var(--sun-glow),
+    0 0 60px 20px var(--sun-glow);
+  z-index:-2;
+  pointer-events:none;
+  transition:background .6s ease,box-shadow .6s ease;
+}
 
-        @keyframes rotateGradient {
-            0% {
-                background-position: 0% 50%;
-            }
+/* Moon craters (only visible at night) */
+#moonCraters{
+  position:fixed;
+  top:8%;
+  right:8%;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  z-index:-2;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .6s ease;
+}
+:root[data-theme="night"] #moonCraters{opacity:1}
 
-            50% {
-                background-position: 100% 50%;
-            }
+/* Stars (only visible at night) */
+#stars{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .8s ease;
+}
+:root[data-theme="night"] #stars{opacity:1}
 
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+/* Scene SVG */
+#scene{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  width:100%;
+  height:100%;
+}
+#scene .sky-part{transition:fill .6s ease,opacity .6s ease}
+#scene .cloud{fill:var(--cloud);opacity:var(--cloud-opacity);transition:fill .6s ease,opacity .6s ease}
+#scene .hill-far{fill:var(--hill-far);transition:fill .6s ease}
+#scene .hill-mid{fill:var(--hill);transition:fill .6s ease}
+#scene .tree-top{fill:var(--tree);transition:fill .6s ease}
+#scene .tree-mid{fill:var(--tree-dark);transition:fill .6s ease}
+#scene .trunk{fill:var(--trunk);transition:fill .6s ease}
+#scene .grass{fill:var(--grass);transition:fill .6s ease}
+#scene .grass-top{fill:var(--grass-dark);transition:fill .6s ease}
+#scene .tuft{fill:var(--grass-dark);transition:fill .6s ease}
 
-        @keyframes pulse {
+/* =========================================================
+   3. LAYOUT PRIMITIVES
+   ========================================================= */
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.section{padding:80px 0}
+.eyebrow{
+  font-family:var(--px);
+  font-size:10px;
+  color:var(--accent);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:20px;
+}
+.eyebrow::before{content:"";width:10px;height:10px;background:var(--accent);flex:none}
+h1,h2,h3{font-family:var(--px);color:var(--head);font-weight:400;line-height:1.4}
+h1{font-size:clamp(24px,5vw,44px);letter-spacing:.5px}
+h2{font-size:clamp(20px,3.5vw,32px);letter-spacing:.5px}
+h3{font-size:14px;letter-spacing:.5px}
+p{max-width:65ch}
+.muted{color:var(--muted)}
 
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 0.5;
-            }
+.paper{
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:6px 6px 0 var(--panel-shadow);
+  padding:32px;
+  transition:background .5s ease,border-color .5s ease,box-shadow .5s ease;
+}
 
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-        }
+/* =========================================================
+   4. NAV
+   ========================================================= */
+#nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--nav-bg);
+  backdrop-filter:blur(8px);
+  border-bottom:3px solid var(--head);
+  transition:background .5s ease,border-color .5s ease;
+}
+.nav-in{
+  max-width:1100px;margin:0 auto;padding:0 24px;
+  height:64px;display:flex;align-items:center;gap:24px;
+}
+.brand{
+  font-family:var(--px);font-size:13px;color:var(--head);
+  display:flex;align-items:center;gap:10px;letter-spacing:1px;
+}
+.brand::before{
+  content:"";width:12px;height:12px;background:var(--accent);
+  box-shadow:3px 3px 0 var(--grass-dark);
+}
+.brand b{color:var(--accent);font-weight:400}
+.nav-links{display:flex;gap:6px;margin-left:auto;align-items:center}
+.nav-links button{
+  font-family:var(--px);font-size:10px;color:var(--muted);
+  padding:12px 14px;letter-spacing:1px;
+  border:2px solid transparent;
+  transition:color .18s ease,border-color .18s ease,background .18s ease;
+}
+.nav-links button:hover{color:var(--head);background:var(--paper2)}
+.nav-links button.on{
+  color:var(--btn-text);
+  background:var(--accent);
+  border-color:var(--accent2);
+}
 
-        .social-btn {
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            display: block;
-            text-decoration: none;
-            color: white;
-        }
+/* Theme toggle */
+#themeToggle{
+  font-family:var(--px);font-size:10px;
+  color:var(--head);
+  border:2px solid var(--head);
+  background:var(--paper2);
+  padding:10px 12px;
+  letter-spacing:1px;
+  display:flex;align-items:center;gap:8px;
+  transition:transform .08s ease,box-shadow .08s ease,background .18s ease;
+  box-shadow:0 3px 0 var(--head);
+}
+#themeToggle:hover{background:var(--accent);color:var(--btn-text);border-color:var(--accent2);box-shadow:0 3px 0 var(--accent2)}
+#themeToggle:active{transform:translateY(3px);box-shadow:0 0 0 transparent}
+#themeToggle .icon{font-family:var(--px);font-size:12px;line-height:1}
 
-        .social-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 0;
-            /* Sit behind content */
-            pointer-events: none;
-            /* Let clicks pass through */
-        }
+#navToggle{display:none;font-family:var(--px);font-size:10px;color:var(--head);padding:12px 14px;border:2px solid var(--head);background:var(--paper)}
 
-        .social-btn:hover {
-            transform: translateY(-4px);
-            border-color: rgba(139, 92, 246, 0.5);
-            box-shadow: 0 10px 40px -10px rgba(139, 92, 246, 0.4);
-        }
+/* =========================================================
+   5. PAGES
+   ========================================================= */
+.page{display:none;opacity:0;transition:opacity .18s ease}
+.page.active{display:block;opacity:1}
 
-        .social-btn:hover::before {
-            opacity: 1;
-        }
+/* =========================================================
+   6. HOME
+   ========================================================= */
+.hero{padding:60px 0 40px}
+.hero-card{
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:8px 8px 0 var(--panel-shadow);
+  padding:clamp(28px,5vw,56px);
+  transition:background .5s ease,border-color .5s ease,box-shadow .5s ease;
+}
+.hero h1{margin:20px 0 20px}
+.hero h1 em{font-style:normal;color:var(--accent);text-shadow:3px 3px 0 var(--grass)}
+.hero-tag{
+  font-family:var(--px);font-size:11px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:24px;
+}
+.hero-sub{margin:0 0 40px;font-size:17px;color:var(--text)}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
 
-        .product-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--px);font-size:10px;
+  color:var(--btn-text);background:var(--accent);
+  border:3px solid var(--accent2);
+  padding:16px 20px;
+  box-shadow:0 5px 0 var(--accent2);
+  transition:transform .08s ease,box-shadow .08s ease,filter .18s ease,background .3s ease,color .3s ease;
+  letter-spacing:1px;
+}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(5px);box-shadow:0 0 0 var(--accent2)}
+.btn.alt{background:var(--paper2);color:var(--head);border-color:var(--head);box-shadow:0 5px 0 var(--head)}
+.btn.alt:active{box-shadow:0 0 0 var(--head)}
+.btn.sm{font-size:9px;padding:12px 14px;box-shadow:0 4px 0 var(--accent2)}
+.btn.sm:active{transform:translateY(4px)}
 
-        .product-card:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 60px -15px rgba(139, 92, 246, 0.3);
-        }
+.stage-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;
+}
+.stage{
+  display:block;
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:6px 6px 0 var(--panel-shadow);
+  padding:32px;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .5s ease;
+}
+.stage:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--panel-shadow-hover);
+  border-color:var(--accent);
+}
+.stage.s1{border-left:10px solid var(--accent)}
+.stage.s2{border-left:10px solid var(--grass-dark)}
+.stage h3{font-size:16px;margin:16px 0 12px;color:var(--head)}
+.stage p{font-size:15px;color:var(--text)}
+.stage-meta{
+  font-family:var(--px);font-size:9px;color:var(--muted);
+  letter-spacing:1px;margin-top:18px;line-height:1.8;
+}
 
-        .product-card .card-image {
-            transition: transform 0.7s;
-        }
+/* =========================================================
+   7. CARDS
+   ========================================================= */
+.grid-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:24px;
+  margin-top:40px;
+}
+.card{
+  display:flex;flex-direction:column;
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:5px 5px 0 var(--panel-shadow);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .5s ease;
+}
+.card:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:9px 9px 0 var(--panel-shadow-hover);
+  border-color:var(--accent);
+}
+.card-media{
+  aspect-ratio:16/10;
+  background:var(--paper2);
+  border-bottom:3px solid var(--head);
+  overflow:hidden;
+  position:relative;
+  transition:background .5s ease,border-color .5s ease;
+}
+.card-media img{width:100%;height:100%;object-fit:cover}
+.card-media.ph{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--px);font-size:10px;color:var(--muted);
+  letter-spacing:1px;
+  background:
+    repeating-linear-gradient(45deg,var(--paper2) 0 10px,var(--line) 10px 20px);
+}
+.card-body{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card-body h3{font-size:13px;color:var(--head);line-height:1.5}
+.card-body p{font-size:14px;color:var(--text);flex:1}
+.card-actions{margin-top:auto;padding-top:10px}
 
-        .product-card:hover .card-image {
-            transform: scale(1.05);
-        }
+.video-list{display:flex;flex-direction:column;gap:20px;margin-top:40px}
+.video-card{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:24px;
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:5px 5px 0 var(--panel-shadow);
+  padding:20px;
+  align-items:center;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .5s ease;
+}
+.video-card:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:9px 9px 0 var(--panel-shadow-hover);
+  border-color:var(--accent);
+}
+.video-thumb{
+  position:relative;
+  aspect-ratio:16/9;
+  background:var(--paper2);
+  border:3px solid var(--head);
+  overflow:hidden;
+  cursor:pointer;
+  transition:background .5s ease,border-color .5s ease;
+}
+.video-thumb img{width:100%;height:100%;object-fit:cover}
+.video-thumb.ph{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--px);font-size:9px;color:var(--muted);
+  text-align:center;padding:12px;
+  background:
+    repeating-linear-gradient(45deg,var(--paper2) 0 10px,var(--line) 10px 20px);
+}
+.video-play{
+  position:absolute;inset:0;margin:auto;
+  width:52px;height:44px;
+  background:var(--accent);color:var(--btn-text);
+  display:flex;align-items:center;justify-content:center;
+  border:3px solid var(--accent2);
+  transition:transform .15s ease;
+}
+.video-thumb:hover .video-play{transform:scale(1.12)}
+.video-info h3{font-size:14px;margin-bottom:10px;color:var(--head);line-height:1.5}
+.video-info p{font-size:14px;color:var(--text);margin-bottom:14px}
+.video-meta{
+  font-family:var(--px);font-size:9px;color:var(--muted);
+  letter-spacing:1px;margin-bottom:14px;
+}
 
-        .card-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            font-size: 12px;
-            font-weight: 600;
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            color: #a78bfa;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
-            /* Ensure it sits on top */
-            z-index: 10;
-        }
+/* =========================================================
+   8. ABOUT STRIP
+   ========================================================= */
+.about{
+  display:grid;grid-template-columns:auto 1fr;gap:32px;
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:6px 6px 0 var(--panel-shadow);
+  padding:32px;margin-top:60px;align-items:center;
+  transition:background .5s ease,border-color .5s ease,box-shadow .5s ease;
+}
+.about-avatar{
+  width:120px;height:120px;
+  background:var(--paper2);
+  border:3px solid var(--head);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--px);font-size:10px;color:var(--muted);
+  flex:none;
+  transition:background .5s ease,border-color .5s ease;
+}
+.about-text h2{font-size:18px;margin-bottom:10px}
+.about-text p{font-size:15px;color:var(--text);margin-bottom:14px}
+.socials{display:flex;gap:10px;flex-wrap:wrap}
+.socials a{
+  font-family:var(--px);font-size:9px;
+  color:var(--text);
+  border:3px solid var(--head);
+  background:var(--paper2);
+  padding:10px 14px;
+  letter-spacing:1px;
+  transition:color .18s ease,border-color .18s ease,background .18s ease;
+}
+.socials a:hover{color:var(--btn-text);background:var(--accent);border-color:var(--accent2)}
 
-        .card-btn:hover {
-            background: rgba(139, 92, 246, 0.2);
-            border-color: rgba(139, 92, 246, 0.4);
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
+/* =========================================================
+   9. MODAL
+   ========================================================= */
+.modal{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  background:var(--modal-backdrop);
+  opacity:0;visibility:hidden;
+  transition:opacity .2s ease,visibility .2s ease,background .5s ease;
+}
+.modal.open{opacity:1;visibility:visible}
+.modal-panel{
+  width:min(880px,100%);
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:10px 10px 0 var(--panel-shadow-hover);
+  max-height:90vh;
+  overflow:auto;
+  transform:translateY(10px);
+  transition:transform .2s ease,background .5s ease,border-color .5s ease;
+}
+.modal.open .modal-panel{transform:translateY(0)}
+.modal-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+  background:var(--accent);color:var(--btn-text);
+  padding:14px 18px;
+  border-bottom:3px solid var(--accent2);
+}
+.modal-bar span{font-family:var(--px);font-size:10px;letter-spacing:1px;line-height:1.6}
+.modal-close{
+  font-family:var(--px);font-size:12px;
+  color:var(--btn-text);border:3px solid var(--accent2);
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s ease,color .15s ease;
+}
+.modal-close:hover{background:var(--paper);color:var(--accent)}
+.modal-body{padding:20px}
+.video-frame{aspect-ratio:16/9;background:#000;border:3px solid var(--head)}
+.video-frame iframe{width:100%;height:100%;border:0;display:block}
+.modal-note{
+  font-family:var(--px);font-size:9px;color:var(--muted);
+  letter-spacing:1px;margin-top:14px;line-height:1.8;
+}
 
-        @keyframes float {
+/* =========================================================
+   10. FOOTER
+   ========================================================= */
+footer{
+  border-top:3px solid var(--head);
+  background:var(--paper);
+  padding:40px 0;
+  margin-top:80px;
+  font-family:var(--px);font-size:9px;
+  color:var(--text);letter-spacing:1px;
+  text-align:center;line-height:2;
+  transition:background .5s ease,border-color .5s ease,color .5s ease;
+}
 
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
+/* =========================================================
+   11. SCROLL REVEAL
+   ========================================================= */
+.reveal{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.reveal.in{opacity:1;transform:none}
 
-            50% {
-                transform: translateY(-10px);
-            }
-        }
+/* =========================================================
+   12. RESPONSIVE
+   ========================================================= */
+@media(max-width:820px){
+  #navToggle{display:block;margin-left:auto}
+  .nav-links{
+    display:none;
+    position:absolute;top:64px;left:0;right:0;
+    background:var(--paper);
+    border-bottom:3px solid var(--head);
+    flex-direction:column;
+    padding:12px;
+    gap:6px;
+  }
+  .nav-links.open{display:flex}
+  .nav-links button{text-align:left;padding:16px 14px;border:3px solid var(--line)}
+  .nav-links button.on{border-color:var(--accent2)}
+  #themeToggle{width:100%;justify-content:center}
+  .stage-grid{grid-template-columns:1fr}
+  .video-card{grid-template-columns:1fr}
+  .about{grid-template-columns:1fr;text-align:center}
+  .about-avatar{margin:0 auto}
+  .socials{justify-content:center}
+  .hero{padding:40px 0 20px}
+  body::after{width:80px;height:80px;top:4%;right:4%}
+  #moonCraters{width:80px;height:80px;top:4%;right:4%}
+}
+@media(max-width:480px){
+  .section{padding:60px 0}
+  .grid-cards{grid-template-columns:1fr}
+  .btn{width:100%;justify-content:center}
+  .hero-cta{flex-direction:column}
+}
 
-        .float {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .status-dot {
-            animation: statusPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes statusPulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
-            }
-
-            50% {
-                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-            }
-        }
-
-        .neon-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
-        }
-
-        .premium-badge {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            animation: badgeGlow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes badgeGlow {
-            from {
-                box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-            }
-
-            to {
-                box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
-            }
-        }
-    </style>
+/* =========================================================
+   13. REDUCED MOTION
+   ========================================================= */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    transition-duration:.001ms!important;
+  }
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
 </head>
-
 <body>
-    <canvas id="particles-canvas"></canvas>
 
-    <div class="relative z-10 min-h-screen">
+<!-- ===================== STARS (night only) ===================== -->
+<svg id="stars" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g fill="#ffffff">
+    <rect x="120" y="80" width="3" height="3"/>
+    <rect x="260" y="140" width="2" height="2"/>
+    <rect x="380" y="60" width="3" height="3"/>
+    <rect x="520" y="180" width="2" height="2"/>
+    <rect x="640" y="100" width="3" height="3"/>
+    <rect x="760" y="220" width="2" height="2"/>
+    <rect x="880" y="70" width="3" height="3"/>
+    <rect x="980" y="160" width="2" height="2"/>
+    <rect x="1120" y="90" width="3" height="3"/>
+    <rect x="1240" y="200" width="2" height="2"/>
+    <rect x="1380" y="120" width="3" height="3"/>
+    <rect x="1500" y="60" width="2" height="2"/>
+    <rect x="70" y="300" width="2" height="2"/>
+    <rect x="200" y="260" width="3" height="3"/>
+    <rect x="320" y="320" width="2" height="2"/>
+    <rect x="450" y="280" width="3" height="3"/>
+    <rect x="590" y="340" width="2" height="2"/>
+    <rect x="710" y="300" width="3" height="3"/>
+    <rect x="840" y="360" width="2" height="2"/>
+    <rect x="960" y="320" width="3" height="3"/>
+    <rect x="1080" y="280" width="2" height="2"/>
+    <rect x="1210" y="340" width="3" height="3"/>
+    <rect x="1340" y="300" width="2" height="2"/>
+    <rect x="1470" y="360" width="3" height="3"/>
+    <rect x="160" y="420" width="2" height="2"/>
+    <rect x="540" y="440" width="2" height="2"/>
+    <rect x="920" y="460" width="2" height="2"/>
+    <rect x="1300" y="440" width="2" height="2"/>
+  </g>
+  <!-- Twinkle layer (CSS animated) -->
+  <g fill="#fff5c2" class="twinkle">
+    <rect x="340" y="120" width="3" height="3"/>
+    <rect x="720" y="160" width="3" height="3"/>
+    <rect x="1160" y="140" width="3" height="3"/>
+    <rect x="1440" y="200" width="3" height="3"/>
+  </g>
+  <style>
+    @keyframes twinkle{0%,100%{opacity:1}50%{opacity:.2}}
+    .twinkle rect{animation:twinkle 3s ease-in-out infinite}
+    .twinkle rect:nth-child(2){animation-delay:.8s}
+    .twinkle rect:nth-child(3){animation-delay:1.6s}
+    .twinkle rect:nth-child(4){animation-delay:2.4s}
+    .about-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  </style>
+</svg>
 
-        <!-- Hero Section --->
-        <section class="min-h-screen flex flex-col items-center justify-center px-6 py-20">
+<!-- ===================== MOON CRATERS (night only) ===================== -->
+<svg id="moonCraters" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" aria-hidden="true">
+  <g fill="#d9d2b0" opacity="0.55">
+    <circle cx="42" cy="42" r="7"/>
+    <circle cx="78" cy="38" r="4"/>
+    <circle cx="60" cy="72" r="9"/>
+    <circle cx="38" cy="82" r="5"/>
+    <circle cx="88" cy="78" r="4"/>
+    <circle cx="72" cy="58" r="3"/>
+  </g>
+</svg>
 
-            <div class="text-center max-w-lg mx-auto">
+<!-- ===================== RETRO NATURE SCENE ===================== -->
+<svg id="scene" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice" viewBox="0 0 1600 900" aria-hidden="true">
+  <!-- Clouds -->
+  <g class="cloud">
+    <g>
+      <rect x="180" y="120" width="80" height="30"/>
+      <rect x="200" y="100" width="50" height="30"/>
+      <rect x="220" y="90" width="30" height="20"/>
+    </g>
+    <g>
+      <rect x="1050" y="180" width="100" height="34"/>
+      <rect x="1080" y="156" width="60" height="34"/>
+      <rect x="1105" y="144" width="36" height="24"/>
+    </g>
+    <g>
+      <rect x="620" y="70" width="70" height="26"/>
+      <rect x="640" y="52" width="42" height="26"/>
+      <rect x="656" y="42" width="22" height="16"/>
+    </g>
+  </g>
 
-                <!-- Profile Image -->
-                <div class="reveal mb-8 flex justify-center">
-                    <div class="profile-ring float">
-                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-black">
-                            <img src="brofizul.png" alt="Profile" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
+  <!-- Distant hills -->
+  <g opacity="0.55">
+    <ellipse class="hill-far" cx="240" cy="740" rx="420" ry="180"/>
+    <ellipse class="hill-far" cx="1380" cy="760" rx="480" ry="190"/>
+  </g>
 
-                <!-- Status Badge -->
-                <div class="reveal flex items-center justify-center gap-2 mb-4" style="transition-delay: 0.1s;">
-                    <span class="premium-badge px-4 py-1 rounded-full text-xs font-bold tracking-wider uppercase">
-                        Premium
-                    </span>
-                    <span class="flex items-center gap-2 text-xs text-neutral-400">
-                        <span class="w-2 h-2 rounded-full bg-green-500 status-dot"></span>
-                        Available for work
-                    </span>
-                </div>
+  <!-- Midground hills -->
+  <g opacity="0.8">
+    <ellipse class="hill-mid" cx="820" cy="800" rx="620" ry="220"/>
+    <ellipse class="hill-mid" cx="120" cy="830" rx="380" ry="180"/>
+    <ellipse class="hill-mid" cx="1500" cy="840" rx="360" ry="180"/>
+  </g>
 
-                <!-- Name -->
-                <h1 class="reveal font-brand text-4xl md:text-5xl font-bold mb-4 gradient-text"
-                    style="transition-delay: 0.2s;">
-                    BROFIZUL
-                </h1>
+  <!-- Trees (left cluster) -->
+  <g>
+    <rect class="trunk" x="130" y="690" width="18" height="80"/>
+    <polygon class="tree-top" points="139,600 90,700 188,700"/>
+    <polygon class="tree-mid" points="139,630 100,700 178,700"/>
+    <polygon class="tree-top" points="139,660 110,700 168,700"/>
 
-                <!-- Tagline -->
-                <p class="reveal text-lg text-neutral-400 mb-2" style="transition-delay: 0.3s;">
-                    Content Creator and Software Developer
-                </p>
+    <rect class="trunk" x="230" y="710" width="16" height="70"/>
+    <polygon class="tree-top" points="238,640 198,720 278,720"/>
+    <polygon class="tree-mid" points="238,665 205,720 271,720"/>
+  </g>
 
-                <!-- Location -->
-                <p class="reveal flex items-center justify-center gap-2 text-sm text-neutral-500 mb-10"
-                    style="transition-delay: 0.4s;">
-                    <i data-lucide="map-pin" class="w-4 h-4"></i>
-                    UMPSA, Pekan
-                </p>
+  <!-- Trees (right cluster) -->
+  <g>
+    <rect class="trunk" x="1380" y="690" width="18" height="80"/>
+    <polygon class="tree-top" points="1389,600 1340,700 1438,700"/>
+    <polygon class="tree-mid" points="1389,630 1350,700 1428,700"/>
+    <polygon class="tree-top" points="1389,660 1360,700 1418,700"/>
 
-                <!-- Neon Line -->
-                <div class="reveal neon-line w-48 mx-auto mb-10" style="transition-delay: 0.5s;"></div>
+    <rect class="trunk" x="1480" y="710" width="16" height="70"/>
+    <polygon class="tree-top" points="1488,640 1448,720 1528,720"/>
+    <polygon class="tree-mid" points="1488,665 1455,720 1521,720"/>
+  </g>
 
-                <!-- Social Links -->
-                <div class="space-y-4 mb-16">
+  <!-- Foreground grass block -->
+  <rect class="grass" x="0" y="770" width="1600" height="130"/>
+  <rect class="grass-top" x="0" y="770" width="1600" height="10"/>
 
-                    <!-- Tiktok -->
+  <!-- Grass tufts -->
+  <g class="tuft">
+    <rect x="40" y="760" width="4" height="14"/>
+    <rect x="46" y="756" width="4" height="18"/>
+    <rect x="52" y="760" width="4" height="14"/>
+    <rect x="300" y="762" width="4" height="12"/>
+    <rect x="306" y="758" width="4" height="16"/>
+    <rect x="312" y="762" width="4" height="12"/>
+    <rect x="700" y="758" width="4" height="16"/>
+    <rect x="706" y="754" width="4" height="20"/>
+    <rect x="712" y="758" width="4" height="16"/>
+    <rect x="1100" y="762" width="4" height="12"/>
+    <rect x="1106" y="758" width="4" height="16"/>
+    <rect x="1112" y="762" width="4" height="12"/>
+    <rect x="1500" y="760" width="4" height="14"/>
+    <rect x="1506" y="756" width="4" height="18"/>
+    <rect x="1512" y="760" width="4" height="14"/>
+  </g>
 
-                    <a href="https://www.tiktok.com/@brofizul" target="_blank" rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 0.5s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                    class="w-5 h-5">
-                                    <path
-                                        d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.58a6.34 6.34 0 0 0 10.86-4.43V7.56a8.16 8.16 0 0 0 4.77 1.49v-3.3a4.85 4.85 0 0 1-1.04-.06z" />
-                                </svg>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">Tiktok</p>
-                                <p class="text-xs text-neutral-500">@brofizul</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
+  <!-- Small pixel flowers -->
+  <g>
+    <rect x="420" y="800" width="6" height="6" fill="#fff5c2"/>
+    <rect x="422" y="798" width="2" height="2" fill="#e07b39"/>
+    <rect x="900" y="810" width="6" height="6" fill="#ffe9a8"/>
+    <rect x="902" y="808" width="2" height="2" fill="#e07b39"/>
+    <rect x="1240" y="805" width="6" height="6" fill="#fff5c2"/>
+    <rect x="1242" y="803" width="2" height="2" fill="#e07b39"/>
+  </g>
+</svg>
 
-                    <a href="https://www.tiktok.com/@alhafizulpg" target="_blank" rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 0.5s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                    class="w-5 h-5">
-                                    <path
-                                        d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.58a6.34 6.34 0 0 0 10.86-4.43V7.56a8.16 8.16 0 0 0 4.77 1.49v-3.3a4.85 4.85 0 0 1-1.04-.06z" />
-                                </svg>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">Tiktok 2nd</p>
-                                <p class="text-xs text-neutral-500">@alhafizulpg</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
+<!-- ===================== NAV ===================== -->
+<header id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#home" data-nav="home">BRO<b>FIZUL</b></a>
+    <button id="navToggle" aria-label="Toggle menu" aria-expanded="false">MENU</button>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <button data-nav="home">HOME</button>
+      <button data-nav="library">LIBRARY</button>
+      <button data-nav="research">RESEARCH</button>
+      <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle day / night">
+        <span class="icon" id="themeIcon">&#9788;</span>
+        <span id="themeLabel">NIGHT</span>
+      </button>
+    </nav>
+  </div>
+</header>
 
-                    <!-- Instagram 
-                    <a href="https://www.instagram.com/brofizultech" target="_blank" rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 0.6s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                                <div
-                                    class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                                        class="w-5 h-5">
-                                        <path
-                                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">Instagram</p>
-                                <p class="text-xs text-neutral-500">@brofizultech</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
-                -->
+<main>
 
-                    <!-- Threads 
-                    <a href="https://www.threads.net/@brofizultech" target="_blank" rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 0.7s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-black border border-neutral-800 flex items-center justify-center">
-                                <svg width="20" height="20" viewBox="0 0 192 192" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M141.538 88.7158C140.733 88.3073 139.911 87.9158 139.074 87.5418C137.261 72.3428 128.122 63.2618 113.135 63.0358C113.052 63.0338 112.97 63.0298 112.886 63.0298C104.432 63.0298 97.3058 66.6718 92.8018 73.3218C87.6538 80.8738 86.8178 91.2678 90.3118 102.393C85.8328 106.217 81.8488 112.03 82.1378 120.304C82.5118 131.485 91.2178 140.352 103.341 141.932C106.636 142.37 110.006 142.59 113.431 142.59C126.152 142.59 139.196 138.894 149.301 131.828C149.983 131.352 150.155 130.407 149.683 129.722L145.037 123.007C144.813 122.687 144.473 122.471 144.095 122.414C143.717 122.357 143.333 122.463 143.029 122.712C132.681 131.209 117.479 135.095 105.188 132.507C97.3838 130.875 92.3338 125.186 92.1338 118.096C92.0038 113.496 94.1878 109.466 98.0238 106.613C103.674 115.138 112.327 119.59 121.742 119.59C130.024 119.59 136.67 116.168 140.665 110.135C144.99 103.604 145.676 94.6288 141.538 88.7158ZM121.735 106.046C115.692 106.046 110.22 102.657 107.405 97.4658C104.579 92.2538 104.881 85.8198 108.189 80.7368C111.099 76.2728 115.708 73.7858 121.068 73.7858C129.104 73.9358 133.896 79.6788 134.942 88.3968C135.226 94.8828 133.232 100.302 129.306 103.658C127.044 105.59 124.38 106.046 121.735 106.046Z"
-                                        fill="white" />
-                                    <path
-                                        d="M96 18C52.578 18 18 52.578 18 96C18 139.422 52.578 174 96 174C139.422 174 174 139.422 174 96C174 52.578 139.422 18 96 18ZM96 161.46C59.493 161.46 30.54 132.507 30.54 96C30.54 59.493 59.493 30.54 96 30.54C132.507 30.54 161.46 59.493 161.46 96C161.46 132.507 132.507 161.46 96 161.46Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">Threads</p>
-                                <p class="text-xs text-neutral-500">@brofizultech</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
-                -->
+<!-- ===================== HOME ===================== -->
+<section class="page active" id="page-home" aria-label="Home">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">EDUCATION HACKS</div>
+        <h1>THERE IS NO<br>FAILURE, ONLY <em>FEEDBACK.</em></h1>
+        <p class="hero-tag">BROFIZUL &middot; CONTENT CREATOR &amp; EDUCATOR</p>
+        
+          
+        <div class="hero-cta">
+          <button class="btn" data-nav="library">ENTER LIBRARY</button>
+          <button class="btn alt" data-nav="research">RESEARCH LAB</button>
+        </div>
+      </div>
 
-                    <!-- LinkedIn
-                    <a href="https://www.linkedin.com/in/muhammad-al-hafizul-bin-al-holidin-973623216/" target="_blank"
-                        rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 0.8s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
-                                <div class="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                                        class="w-5 h-5">
-                                        <path
-                                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C0.792 0 0 0.774 0 1.729v20.542C0 23.227 0.792 24 1.771 24h20.451c0.979 0 1.771-0.773 1.771-1.729V1.729C24 0.774 23.205 0 22.225 0z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">LinkedIn</p>
-                                <p class="text-xs text-neutral-500">Connect with me</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
-                    -->
+      <div class="stage-grid">
+        <a class="stage s1 reveal" data-nav="library" href="#library">
+          <div class="eyebrow">STAGE 01</div>
+          <h3>THE LIBRARY</h3>
+          
+          <div class="stage-meta">FORMAT: PDF &middot; FREE FOREVER</div>
+        </a>
+        <a class="stage s2 reveal" data-nav="research" href="#research">
+          <div class="eyebrow">STAGE 02</div>
+          <h3>RESEARCH LAB</h3>
+          
+          <div class="stage-meta">FORMAT: VIDEO &middot; CURATED</div>
+        </a>
+      </div>
 
-                    <!-- WhatsApp -->
-                    <a href="https://wa.me/60178376881" target="_blank" rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 0.8s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center">
-                                <i data-lucide="message-circle" class="w-5 h-5"></i>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">WhatsApp</p>
-                                <p class="text-xs text-neutral-500">+60178376881</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
-
-
-                    <!-- Telegram
-                    <a href="https://t.me/brofizul" target="_blank" rel="noopener noreferrer"
-                        class="reveal social-btn w-full max-w-sm mx-auto rounded-2xl px-6 py-4"
-                        style="transition-delay: 1.0s;">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center">
-                                <i data-lucide="send" class="w-5 h-5"></i>
-                            </div>
-                            <div class="text-left flex-1">
-                                <p class="font-semibold text-sm">Telegram</p>
-                                <p class="text-xs text-neutral-500">@brofizul</p>
-                            </div>
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-neutral-500"></i>
-                        </div>
-                    </a>
-                -->
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Products & Services Section -->
-        <section class="px-6 pb-32">
-            <div class="max-w-4xl mx-auto">
-
-                <!-- Section Header -->
-                <div class="text-center mb-16">
-                    <h2 class="reveal font-brand text-2xl md:text-3xl font-bold mb-4">OFFERINGS</h2>
-                    <p class="reveal text-neutral-500 text-sm max-w-md mx-auto" style="transition-delay: 0.1s;">
-                        Real World Solutions and Services
-                    </p>
-                </div>
-
-                <!-- Products Grid -->
-                <div class="grid md:grid-cols-2 gap-6 mb-16">
-
-                    <!-- Ebook -->
-                    <div class="reveal product-card rounded-3xl overflow-hidden group cursor-pointer"
-                        style="transition-delay: 0.2s;" data-tilt>
-                        <div class="aspect-video overflow-hidden">
-                            <img src="bbb.png" alt="KitaGrow Community"
-                                class="card-image w-full h-full object-cover opacity-70 group-hover:opacity-100">
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-3">
-                                <span
-                                    class="text-xs text-violet-400 font-semibold tracking-wider uppercase">E-Books</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2">E-Book 4 FLAT HACKS</h3>
-                            <p class="text-sm text-neutral-400 mb-4">All The Weapons and Tools You Need to Achieve 4
-                                Flat in Your Life.</p>
-
-                            <!-- "Join Now" Button -->
-                            <a href="https://anyflip.com/tmrde/bsmx" target="_blank" rel="noopener noreferrer"
-                                class="card-btn">
-                                <i data-lucide="users" class="w-4 h-4"></i>
-                                <span>Read</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Product 1: Public Gold -->
-                    <div class="reveal product-card rounded-3xl overflow-hidden group cursor-pointer"
-                        style="transition-delay: 0.2s;" data-tilt>
-                        <div class="aspect-video overflow-hidden">
-                            <img src="gold.png" alt="KitaGrow Community"
-                                class="card-image w-full h-full object-cover opacity-70 group-hover:opacity-100">
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-3">
-                                <span
-                                    class="text-xs text-violet-400 font-semibold tracking-wider uppercase">Community</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2">PUBLIC GOLD</h3>
-                            <p class="text-sm text-neutral-400 mb-4">Mulakan Perjalan Menyimpan Emas Anda.</p>
-
-                            <!-- "Join Now" Button -->
-                            <a href="https://pg5g.my/alhafizul" target="_blank" rel="noopener noreferrer"
-                                class="card-btn">
-                                <i data-lucide="users" class="w-4 h-4"></i>
-                                <span>Mula Menyimpan Emas</span>
-                            </a>
-                        </div>
-                    </div>
-
-
-                    <!-- Product 2: Hendrixx Shirts -->
-                    <div class="reveal product-card rounded-3xl overflow-hidden group cursor-pointer"
-                        style="transition-delay: 0.3s;" data-tilt>
-                        <div class="aspect-video overflow-hidden">
-                            <img src="sup.png" alt="Hendrixx Sublimation Shirts"
-                                class="card-image w-full h-full object-cover opacity-70 group-hover:opacity-100">
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-3">
-                                <span
-                                    class="text-xs text-violet-400 font-semibold tracking-wider uppercase">Product</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2">Supra Clothing Custom Sublimation</h3>
-                            <p class="text-sm text-neutral-400 mb-4">100% Customizeable Sublimation Shirts For Clubs,
-                                Organisation and Students.</p>
-
-                            <!-- "Customizable" Button -->
-                            <a href="https://supraclothing.com" target="_blank" rel="noopener noreferrer"
-                                class="card-btn">
-                                <i data-lucide="shirt" class="w-4 h-4"></i>
-                                <span>Find Out More</span>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Services 
-                <h3 class="reveal font-brand text-xl font-bold mb-8 text-center">SERVICES</h3>
-
-                <div class="grid md:grid-cols-3 gap-4">
-
-                    
-                    <div class="reveal product-card rounded-2xl p-6 text-center group cursor-pointer"
-                        style="transition-delay: 0.4s;" data-tilt>
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 flex items-center justify-center mx-auto mb-4 border border-violet-500/20 group-hover:border-violet-500/40 transition-colors">
-                            <i data-lucide="at-sign" class="w-6 h-6 text-violet-400"></i>
-                        </div>
-                        <h4 class="font-bold mb-2">Threads Marketing</h4>
-                        <p class="text-xs text-neutral-500 mb-4">Daily post for threads content and seo management</p>
-                        <p class="text-sm font-bold text-violet-400">From RM100</p>
-                    </div>
-
-                    
-                    <div class="reveal product-card rounded-2xl p-6 text-center group cursor-pointer"
-                        style="transition-delay: 0.5s;" data-tilt>
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 flex items-center justify-center mx-auto mb-4 border border-violet-500/20 group-hover:border-violet-500/40 transition-colors">
-                            <i data-lucide="video" class="w-6 h-6 text-violet-400"></i>
-                        </div>
-                        <h4 class="font-bold mb-2">Brand Promotion</h4>
-                        <p class="text-xs text-neutral-500 mb-4">Short form videos to promote products or services</p>
-                        <p class="text-sm font-bold text-violet-400">From RM200</p>
-                    </div>
-
-                    
-                    <div class="reveal product-card rounded-2xl p-6 text-center group cursor-pointer"
-                        style="transition-delay: 0.6s;" data-tilt>
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 flex items-center justify-center mx-auto mb-4 border border-violet-500/20 group-hover:border-violet-500/40 transition-colors">
-                            <i data-lucide="graduation-cap" class="w-6 h-6 text-violet-400"></i>
-                        </div>
-                        <h4 class="font-bold mb-2">Mentoring</h4>
-                        <p class="text-xs text-neutral-500 mb-4">Weekly mentoring for youth</p>
-                        <p class="text-sm font-bold text-green-400">Free of charge</p>
-                    </div>
-
-                </div>
-                -->
-
-                <!-- CTA Button -->
-                <div class="reveal text-center mt-12" style="transition-delay: 0.7s;">
-                    <a href="https://wa.me/60178376881" target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center gap-2 bg-white text-black px-8 py-4 rounded-full font-bold text-sm tracking-wider uppercase hover:bg-neutral-200 transition-colors hover:scale-105 transform duration-300">
-                        <span>Get in Touch</span>
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="border-t border-white/5 py-8 px-6">
-            <div
-                class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-                <p class="text-xs text-neutral-600">© 2026 Brofizul | Education Hacks. All rights reserved.</p>
-                <!-- <div class="flex items-center gap-4">
-                    <a href="https://www.instagram.com/brofizultech" target="_blank" rel="noopener noreferrer"
-                        class="text-neutral-600 hover:text-white transition-colors">
-                        <i data-lucide="instagram" class="w-5 h-5"></i>
-                    </a>
-                    <a href="https://www.threads.net/@brofizultech" target="_blank" rel="noopener noreferrer"
-                        class="text-neutral-600 hover:text-white transition-colors">
-                        <svg width="20" height="20" viewBox="0 0 192 192" fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M141.538 88.7158C140.733 88.3073 139.911 87.9158 139.074 87.5418C137.261 72.3428 128.122 63.2618 113.135 63.0358C113.052 63.0338 112.97 63.0298 112.886 63.0298C104.432 63.0298 97.3058 66.6718 92.8018 73.3218C87.6538 80.8738 86.8178 91.2678 90.3118 102.393C85.8328 106.217 81.8488 112.03 82.1378 120.304C82.5118 131.485 91.2178 140.352 103.341 141.932C106.636 142.37 110.006 142.59 113.431 142.59C126.152 142.59 139.196 138.894 149.301 131.828C149.983 131.352 150.155 130.407 149.683 129.722L145.037 123.007C144.813 122.687 144.473 122.471 144.095 122.414C143.717 122.357 143.333 122.463 143.029 122.712C132.681 131.209 117.479 135.095 105.188 132.507C97.3838 130.875 92.3338 125.186 92.1338 118.096C92.0038 113.496 94.1878 109.466 98.0238 106.613C103.674 115.138 112.327 119.59 121.742 119.59C130.024 119.59 136.67 116.168 140.665 110.135C144.99 103.604 145.676 94.6288 141.538 88.7158ZM121.735 106.046C115.692 106.046 110.22 102.657 107.405 97.4658C104.579 92.2538 104.881 85.8198 108.189 80.7368C111.099 76.2728 115.708 73.7858 121.068 73.7858C129.104 73.9358 133.896 79.6788 134.942 88.3968C135.226 94.8828 133.232 100.302 129.306 103.658C127.044 105.59 124.38 106.046 121.735 106.046Z" />
-                            <path
-                                d="M96 18C52.578 18 18 52.578 18 96C18 139.422 52.578 174 96 174C139.422 174 174 139.422 174 96C174 52.578 139.422 18 96 18ZM96 161.46C59.493 161.46 30.54 132.507 30.54 96C30.54 59.493 59.493 30.54 96 30.54C132.507 30.54 161.46 59.493 161.46 96C161.46 132.507 132.507 161.46 96 161.46Z" />
-                        </svg>
-                    </a>
-                </div> -->
-            </div>
-        </footer>
-
+      <div class="about reveal">
+        <div class="about-avatar" aria-hidden="true">
+  <img src="covers/me.jpg" alt="Brofizul" loading="lazy">
+</div>
+        <div class="about-text">
+          <div class="eyebrow">ABOUT</div>
+          <h2>HI, I'M BROFIZUL.</h2>
+          <p>
+            I make education feel less like a chore and more like a side quest.
+            Everything I create lives here first — free, no ads, no tracking.
+          </p>
+          <div class="socials">
+            <a href="https://www.tiktok.com/@brofizul" target="_blank" rel="noopener">TIKTOK</a>
+            <a href="https://www.tiktok.com/@alhafizulpg" target="_blank" rel="noopener">TIKTOK 2</a>
+            <a href="https://wa.me/60178376881" target="_blank" rel="noopener">WHATSAPP</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <script>
-        // Wait for the DOM to be fully loaded before running scripts
-        document.addEventListener('DOMContentLoaded', function () {
+<!-- ===================== LIBRARY ===================== -->
+<section class="page" id="page-library" aria-label="Library">
+  <div class="wrap section">
+    <div class="paper">
+      <div class="eyebrow">ZONE 02 &middot; FILE SELECT</div>
+      <h2>THE LIBRARY</h2>
+      
+      <div class="grid-cards" id="bookGrid"></div>
+    </div>
+  </div>
+</section>
 
-            // Initialize Lucide Icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+<!-- ===================== RESEARCH ===================== -->
+<section class="page" id="page-research" aria-label="Research">
+  <div class="wrap section">
+    <div class="paper">
+      <div class="eyebrow">ZONE 03 &middot; BRIEFINGS</div>
+      <h2>RESEARCH LAB</h2>
+      
+      <div class="video-list" id="videoList"></div>
+    </div>
+  </div>
+</section>
 
-            // Particles Animation
-            const canvas = document.getElementById('particles-canvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                let particles = [];
-                let mouseX = 0;
-                let mouseY = 0;
+</main>
 
-                function resizeCanvas() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <p>&copy; <span id="year"></span> BROFIZUL &middot; EDUCATION HACKS</p>
+    <p>FREE KNOWLEDGE &middot; NO ADS &middot; NO TRACKING</p>
+  </div>
+</footer>
 
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                });
+<!-- ===================== MODAL ===================== -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div class="modal-panel">
+    <div class="modal-bar">
+      <span id="modalTitle">VIDEO BRIEFING</span>
+      <button class="modal-close" id="modalClose" aria-label="Close modal">X</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
-                class Particle {
-                    constructor() {
-                        this.reset();
-                    }
+<script>
+'use strict';
 
-                    reset() {
-                        this.x = Math.random() * canvas.width;
-                        this.y = Math.random() * canvas.height;
-                        this.size = Math.random() * 2 + 0.5;
-                        this.speedX = (Math.random() - 0.5) * 0.3;
-                        this.speedY = (Math.random() - 0.5) * 0.3;
-                        this.opacity = Math.random() * 0.5 + 0.1;
-                        this.hue = Math.random() > 0.5 ? 250 : 270;
-                    }
+/* =========================================================
+   1. HELPERS
+   ========================================================= */
+const $  = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-                    update() {
-                        this.x += this.speedX;
-                        this.y += this.speedY;
+/* =========================================================
+   2. THEME TOGGLE
+   ========================================================= */
+const THEME_KEY = 'brofizul_theme';
+const themeIcon  = $('#themeIcon');
+const themeLabel = $('#themeLabel');
+const themeMeta  = document.querySelector('meta[name="theme-color"]');
 
-                        const dx = mouseX - this.x;
-                        const dy = mouseY - this.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+function applyTheme(theme){
+  const isNight = theme === 'night';
+  if (isNight) {
+    document.documentElement.dataset.theme = 'night';
+  } else {
+    delete document.documentElement.dataset.theme;
+  }
+  if (themeIcon)  themeIcon.textContent  = isNight ? '\u263D' : '\u2600'; // ☽ / ☀
+  if (themeLabel) themeLabel.textContent = isNight ? 'DAY' : 'NIGHT';
+  if (themeMeta)  themeMeta.setAttribute('content', isNight ? '#0d1330' : '#a8dff5');
+  try { localStorage.setItem(THEME_KEY, theme); } catch(e){}
+}
 
-                        if (dist < 150) {
-                            const force = (150 - dist) / 150;
-                            this.x -= dx * force * 0.02;
-                            this.y -= dy * force * 0.02;
-                        }
+function initTheme(){
+  let saved = 'day';
+  try { saved = localStorage.getItem(THEME_KEY) || 'day'; } catch(e){}
+  applyTheme(saved);
+}
 
-                        if (this.x < 0) this.x = canvas.width;
-                        if (this.x > canvas.width) this.x = 0;
-                        if (this.y < 0) this.y = canvas.height;
-                        if (this.y > canvas.height) this.y = 0;
-                    }
+function toggleTheme(){
+  const isNight = document.documentElement.dataset.theme === 'night';
+  applyTheme(isNight ? 'day' : 'night');
+}
 
-                    draw() {
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                        ctx.fillStyle = `hsla(${this.hue}, 70%, 60%, ${this.opacity})`;
-                        ctx.fill();
-                    }
-                }
+/* =========================================================
+   3. DATA
+   ========================================================= */
+const BOOKS = [
+  { id:1, title:'4 Flat Hacks',  desc:'Kuasai Segala Bidang', file:'pdfs/4FlatHacks.pdf',  cover:'covers/cover1.png' },
+  { id:2, title:'Awaken The Giant Within',         desc:'Tony Robbins', file:'pdfs/AwakenTheGiantWithin.pdf', cover:'covers/cover2.png' },
+  { id:3, title:'Logic Gates & Lightning', desc:'...', file:'',   cover:'' },                       // ← no cover yet
+  { id:4, title:'Machines That Dream',     desc:'...', file:'',      cover:'covers/nn.jpg' },
+  { id:5, title:'Empires of Data',         desc:'...', file:'',    cover:'' },                       // ← no cover yet
+  { id:6, title:'Speedrun Your Studies',   desc:'...', file:'',   cover:'covers/speed.jpg' }
+];
 
-                for (let i = 0; i < 80; i++) {
-                    particles.push(new Particle());
-                }
+const VIDEOS = [
+  { id:'S_-uD3GtFno', title:'Obsidian Note-Taking System for Academics & Students',       ch:'The Effortless Academy', desc:'Using Obsidian for research is like learning to ride a bicycle.' },
+  { id:'', title:'', ch:'', desc:'' },
+  { id:'', title:'',             ch:'',  desc:'' },
+  { id:'', title:'',                     ch:'',      desc:'' }
+];
 
-                function drawConnections() {
-                    for (let i = 0; i < particles.length; i++) {
-                        for (let j = i + 1; j < particles.length; j++) {
-                            const dx = particles[i].x - particles[j].x;
-                            const dy = particles[i].y - particles[j].y;
-                            const dist = Math.sqrt(dx * dx + dy * dy);
+/* =========================================================
+   4. RENDERERS
+   ========================================================= */
+function renderBooks(){
+  const grid = $('#bookGrid');
+  if (!grid) return;
 
-                            if (dist < 120) {
-                                ctx.beginPath();
-                                ctx.moveTo(particles[i].x, particles[i].y);
-                                ctx.lineTo(particles[j].x, particles[j].y);
-                                ctx.strokeStyle = `rgba(139, 92, 246, ${(1 - dist / 120) * 0.15})`;
-                                ctx.lineWidth = 0.5;
-                                ctx.stroke();
-                            }
-                        }
-                    }
-                }
+  grid.innerHTML = BOOKS.map(b => {
+    const hasCover = b.cover && b.cover.trim() !== '';
 
-                function animate() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const cover = hasCover
+      ? `<img
+           src="${b.cover}"
+           alt="${b.title} cover"
+           loading="lazy"
+           onerror="this.onerror=null;this.parentNode.classList.add('ph');this.parentNode.innerHTML='<span>NO COVER</span>';">
+        `
+      : `<div class="card-media ph"><span>NO COVER</span></div>`;
 
-                    particles.forEach(p => {
-                        p.update();
-                        p.draw();
-                    });
+    // When cover exists, we still need the .card-media wrapper
+    const mediaBlock = hasCover
+      ? `<div class="card-media">${cover}</div>`
+      : cover;
 
-                    drawConnections();
+    return `
+      <article class="card reveal">
+        ${mediaBlock}
+        <div class="card-body">
+          <h3>${b.title}</h3>
+          
+          <div class="card-actions">
+  ${(b.file && b.file.trim() !== '')
+    ? `<a class="btn sm" href="${b.file}" download>DOWNLOAD PDF</a>`
+    : `<button class="btn sm alt" disabled style="opacity:.5;cursor:not-allowed;">COMING SOON</button>`
+  }
+</div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
 
-                    requestAnimationFrame(animate);
-                }
-                animate();
-            }
+function renderVideos(){
+  const list = $('#videoList');
+  if (!list) return;
 
-            // Scroll Reveal
-            const revealElements = document.querySelectorAll('.reveal');
-            if (revealElements.length > 0) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                        }
-                    });
-                }, { threshold: 0.1 });
+  list.innerHTML = VIDEOS.map(v => {
+    const hasVideo = v.id && v.id.trim() !== '';
 
-                revealElements.forEach(el => observer.observe(el));
-            }
+    const thumb = hasVideo
+      ? `<button class="video-thumb" data-video="${v.id}" aria-label="Play ${v.title}">
+           <img
+             src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg"
+             alt="${v.title}"
+             loading="lazy"
+             onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v.id}/mqdefault.jpg';">
+           <span class="video-play" aria-hidden="true">&#9654;</span>
+         </button>`
+      : `<div class="video-thumb ph" aria-hidden="true">
+           <span>NO VIDEO YET</span>
+         </div>`;
 
-            // 3D Tilt Effect for Cards
-            const tiltCards = document.querySelectorAll('[data-tilt]');
-            if (tiltCards.length > 0) {
-                tiltCards.forEach(card => {
-                    card.addEventListener('mousemove', (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        const centerX = rect.width / 2;
-                        const centerY = rect.height / 2;
+    const watchBtn = hasVideo
+      ? `<button class="btn sm" data-video="${v.id}">WATCH BRIEFING</button>`
+      : `<button class="btn sm alt" disabled style="opacity:.5;cursor:not-allowed;">COMING SOON</button>`;
 
-                        const rotateX = (y - centerY) / 20;
-                        const rotateY = (centerX - x) / 20;
+    return `
+      <article class="video-card reveal">
+        ${thumb}
+        <div class="video-info">
+          <h3>${v.title}</h3>
+          
+          <div class="video-meta">${(v.ch || '').toUpperCase()}</div>
+          ${watchBtn}
+        </div>
+      </article>
+    `;
+  }).join('');
+}
 
-                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-                    });
+/* =========================================================
+   5. NAVIGATION
+   ========================================================= */
+const PAGES = ['home','library','research'];
 
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-                    });
-                });
-            }
+function showPage(name){
+  if (!PAGES.includes(name)) name = 'home';
 
-        });
-    </script>
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+
+  $$('[data-nav]').forEach(el => {
+    if (el.tagName === 'BUTTON') {
+      el.classList.toggle('on', el.dataset.nav === name);
+    }
+  });
+
+  const links = $('#navLinks');
+  const toggle = $('#navToggle');
+  if (links) links.classList.remove('open');
+  if (toggle) toggle.setAttribute('aria-expanded', 'false');
+
+  if (history.replaceState) history.replaceState(null, '', '#' + name);
+
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#themeToggle')) {
+    toggleTheme();
+    return;
+  }
+
+  const trigger = e.target.closest('[data-nav]');
+  if (trigger) {
+    e.preventDefault();
+    showPage(trigger.dataset.nav);
+    return;
+  }
+
+  const toggle = e.target.closest('#navToggle');
+  if (toggle) {
+    const links = $('#navLinks');
+    if (links) {
+      const open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+  }
+});
+
+/* =========================================================
+   6. MODAL
+   ========================================================= */
+const modal      = $('#modal');
+const modalBody  = $('#modalBody');
+const modalTitle = $('#modalTitle');
+const modalClose = $('#modalClose');
+let lastFocused = null;
+
+function openVideo(id){
+  const v = VIDEOS.find(x => x.id === id);
+  if (!v || !modal || !modalBody) return;
+
+  lastFocused = document.activeElement;
+  modalTitle.textContent = v.title.toUpperCase();
+  modalBody.innerHTML = `
+    <div class="video-frame">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0"
+        title="${v.title}"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    
+  `;
+
+  modal.hidden = false;
+  requestAnimationFrame(() => modal.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+  modalClose.focus();
+}
+
+function closeModal(){
+  if (!modal || modal.hidden) return;
+
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+
+  const iframe = modalBody.querySelector('iframe');
+  if (iframe) iframe.src = 'about:blank';
+  modalBody.innerHTML = '';
+
+  setTimeout(() => {
+    modal.hidden = true;
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }, 200);
+}
+
+document.addEventListener('click', (e) => {
+  const play = e.target.closest('[data-video]');
+  if (play) {
+    e.preventDefault();
+    openVideo(play.dataset.video);
+    return;
+  }
+  if (e.target === modal) closeModal();
+});
+
+if (modalClose) modalClose.addEventListener('click', closeModal);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (modal && !modal.hidden) { closeModal(); return; }
+    const links = $('#navLinks');
+    if (links) links.classList.remove('open');
+  }
+});
+
+/* =========================================================
+   7. SCROLL REVEAL
+   ========================================================= */
+function initReveal(){
+  const els = $$('.reveal');
+  if (!els.length) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  els.forEach(el => io.observe(el));
+}
+
+/* =========================================================
+   8. INIT
+   ========================================================= */
+function init(){
+  const yearEl = $('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  initTheme();
+  renderBooks();
+  renderVideos();
+
+  const fromHash = (location.hash || '').replace(/^#\/?/, '');
+  showPage(PAGES.includes(fromHash) ? fromHash : 'home');
+
+  initReveal();
+}
+
+window.addEventListener('hashchange', () => {
+  const name = (location.hash || '').replace(/^#\/?/, '');
+  if (PAGES.includes(name)) showPage(name);
+});
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
 </body>
-
 </html>
