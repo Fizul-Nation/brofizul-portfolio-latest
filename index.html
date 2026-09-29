@@ -437,6 +437,53 @@ p{max-width:65ch}
 }
 
 /* =========================================================
+   7B. LINK CARDS (SPM)
+   ========================================================= */
+.link-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:24px;
+  margin-top:40px;
+}
+.link-card{
+  display:flex;flex-direction:column;
+  background:var(--paper);
+  border:3px solid var(--head);
+  box-shadow:5px 5px 0 var(--panel-shadow);
+  padding:24px;
+  gap:14px;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .5s ease;
+}
+.link-card:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:9px 9px 0 var(--panel-shadow-hover);
+  border-color:var(--accent);
+}
+.link-card h3{
+  font-size:13px;
+  color:var(--head);
+  line-height:1.5;
+  margin:0;
+}
+.link-card .link-desc{
+  font-size:14px;
+  color:var(--text);
+  flex:1;
+  margin:0;
+}
+.link-card .link-tag{
+  font-family:var(--px);
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:1px;
+}
+.link-card .link-actions{
+  margin-top:auto;
+  padding-top:10px;
+}
+.link-card .link-actions .btn{width:100%;justify-content:center}
+
+/* =========================================================
    8. ABOUT STRIP
    ========================================================= */
 .about{
@@ -749,6 +796,7 @@ footer{
     <nav class="nav-links" id="navLinks" aria-label="Main">
       <button data-nav="home">HOME</button>
       <button data-nav="library">LIBRARY</button>
+      <button data-nav="spm">SPM</button>
       <button data-nav="research">RESEARCH</button>
       <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle day / night">
         <span class="icon" id="themeIcon">&#9788;</span>
@@ -825,11 +873,22 @@ footer{
   </div>
 </section>
 
+<!-- ===================== SPM ===================== -->
+<section class="page" id="page-spm" aria-label="SPM">
+  <div class="wrap section">
+    <div class="paper">
+      <div class="eyebrow">ZONE 03 &middot; SPM RESOURCES</div>
+      <h2>SPM HUB</h2>
+      <div class="link-grid" id="linkGrid"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== RESEARCH ===================== -->
 <section class="page" id="page-research" aria-label="Research">
   <div class="wrap section">
     <div class="paper">
-      <div class="eyebrow">ZONE 03 &middot; BRIEFINGS</div>
+      <div class="eyebrow">ZONE 04 &middot; BRIEFINGS</div>
       <h2>RESEARCH LAB</h2>
       
       <div class="video-list" id="videoList"></div>
@@ -918,6 +977,13 @@ const VIDEOS = [
   { id:'', title:'',                     ch:'',      desc:'' }
 ];
 
+const LINKS = [
+  { id:1, title:'SPM Past Year Papers', desc:'Full archive of SPM past year papers by subject.', url:'https://trial.spmpaper.me/', tag:'PAPERS' },
+  { id:2, title:'SPM Notes & Summaries', desc:'Condensed notes for every SPM subject.',          url:'',  tag:'NOTES' },
+  { id:3, title:'SPM Exercise Bank',     desc:'Practice questions with worked solutions.',       url:'', tag:'PRACTICE' },
+  { id:4, title:'Coming Soon',           desc:'More SPM resources will be added here.',          url:'', tag:'SOON' }
+];
+
 /* =========================================================
    4. RENDERERS
    ========================================================= */
@@ -998,10 +1064,32 @@ function renderVideos(){
   }).join('');
 }
 
+function renderLinks(){
+  const grid = $('#linkGrid');
+  if (!grid) return;
+
+  grid.innerHTML = LINKS.map(l => {
+    const hasUrl = l.url && l.url.trim() !== '';
+
+    const action = hasUrl
+      ? `<a class="btn sm" href="${l.url}" target="_blank" rel="noopener noreferrer">OPEN LINK</a>`
+      : `<button class="btn sm alt" disabled style="opacity:.5;cursor:not-allowed;">COMING SOON</button>`;
+
+    return `
+      <article class="link-card reveal">
+        <span class="link-tag">${(l.tag || '').toUpperCase()}</span>
+        <h3>${l.title}</h3>
+        <p class="link-desc">${l.desc}</p>
+        <div class="link-actions">${action}</div>
+      </article>
+    `;
+  }).join('');
+}
+
 /* =========================================================
    5. NAVIGATION
    ========================================================= */
-const PAGES = ['home','library','research'];
+const PAGES = ['home','library','spm','research'];
 
 function showPage(name){
   if (!PAGES.includes(name)) name = 'home';
@@ -1150,6 +1238,7 @@ function init(){
   initTheme();
   renderBooks();
   renderVideos();
+  renderLinks();
 
   const fromHash = (location.hash || '').replace(/^#\/?/, '');
   showPage(PAGES.includes(fromHash) ? fromHash : 'home');
